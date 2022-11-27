@@ -1,6 +1,6 @@
 {
   "name": "@imkopkap/strapi-provider-upload-google-cloud-storage-with-watermark",
-  "version": "4.3.6-4",
+  "version": "4.3.7",
   "description": "(Non-official) Google Cloud Storage Provider for Strapi Upload",
   "keywords": [
     "strapi",
