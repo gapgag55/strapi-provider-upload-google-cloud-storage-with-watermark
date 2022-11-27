@@ -11,11 +11,13 @@
 Install the package from your app root directory
 
 with `npm`
+
 ```
 npm install @strapi-community/strapi-provider-upload-google-cloud-storage --save
 ```
 
 or `yarn`
+
 ```
 yarn add @strapi-community/strapi-provider-upload-google-cloud-storage
 ```
@@ -25,26 +27,28 @@ yarn add @strapi-community/strapi-provider-upload-google-cloud-storage
 The bucket should be created with **fine grained** access control, as the plugin will configure uploaded files with public read access.
 
 ### How to create a bucket ?
+
 - https://cloud.google.com/storage/docs/creating-buckets
 
 ### Where my bucket can be located ?
+
 - https://cloud.google.com/storage/docs/locations
 
 ## <a name="setup-auth"></a> Setting up Google authentication
 
-If you are deploying to a Google Cloud Platform product that supports [Application Default Credentials](https://cloud.google.com/docs/authentication/production#finding_credentials_automatically) (such as App Engine, Cloud Run, and Cloud Functions etc.), then you can skip this step. 
+If you are deploying to a Google Cloud Platform product that supports [Application Default Credentials](https://cloud.google.com/docs/authentication/production#finding_credentials_automatically) (such as App Engine, Cloud Run, and Cloud Functions etc.), then you can skip this step.
 
 If you are deploying outside GCP, then follow these steps to set up authentication:
 
 1. In the GCP Console, go to the **Create service account key** page.
-    - **[Go to the create service account key page](https://console.cloud.google.com/apis/credentials/serviceaccountkey)**
+   - **[Go to the create service account key page](https://console.cloud.google.com/apis/credentials/serviceaccountkey)**
 2. From the **Service account** list, select **New service account**.
 3. In the **Service account name** field, enter a name.
 4. From the **Role** list, select **Cloud Storage > Storage Admin**.
 5. Select `JSON` for **Key Type**
 6. Click **Create**. A JSON file that contains your key downloads to your computer.
 7. Copy the full content of the downloaded JSON file
-8. Open the Strapi configuration file 
+8. Open the Strapi configuration file
 9. Paste it into the "Service Account JSON" field (as `string` or `JSON`, be careful with indentation)
 
 ## Setting up the configuration file
@@ -65,19 +69,20 @@ Edit `./config/plugins.js`
 
 ```js
 module.exports = {
-    upload: {
-      config: {
-        provider: '@strapi-community/strapi-provider-upload-google-cloud-storage',
-        providerOptions: {
-            bucketName: '#bucketName#',
-            publicFiles: false,
-            uniform: false,
-            basePath: '',
-        },
+  upload: {
+    config: {
+      provider: '@strapi-community/strapi-provider-upload-google-cloud-storage',
+      providerOptions: {
+        bucketName: '#bucketName#',
+        publicFiles: false,
+        uniform: false,
+        basePath: '',
+        watermark: '<absolute path or URL>',
       },
     },
-    //...
-}
+  },
+  //...
+};
 ```
 
 **Example with credentials for outside GCP account**
@@ -86,24 +91,26 @@ Edit `./config/plugins.js`
 
 ```js
 module.exports = {
-    upload: {
-      config: {
-        provider: '@strapi-community/strapi-provider-upload-google-cloud-storage',
-        providerOptions: {
-            bucketName: '#bucketName#',
-            publicFiles: true,
-            uniform: false,
-            serviceAccount: {}, // replace `{}` with your serviceAccount JSON object
-            baseUrl: 'https://storage.googleapis.com/{bucket-name}',
-            basePath: '',
-        },
+  upload: {
+    config: {
+      provider: '@strapi-community/strapi-provider-upload-google-cloud-storage',
+      providerOptions: {
+        bucketName: '#bucketName#',
+        publicFiles: true,
+        uniform: false,
+        serviceAccount: {}, // replace `{}` with your serviceAccount JSON object
+        baseUrl: 'https://storage.googleapis.com/{bucket-name}',
+        basePath: '',
+        watermark: '<absolute path or URL>',
       },
     },
-    //...
-}
+  },
+  //...
+};
 ```
 
-If you have different upload provider by environment, you can override `plugins.js` file by environment : 
+If you have different upload provider by environment, you can override `plugins.js` file by environment :
+
 - `config/env/development/plugins.js`
 - `config/env/production/plugins.js`
 
@@ -113,20 +120,21 @@ This file, under `config/env/{env}/` will be overriding default configuration pr
 
 ```js
 module.exports = ({ env }) => ({
-    upload: {
-      config: {
-        provider: '@strapi-community/strapi-provider-upload-google-cloud-storage',
-        providerOptions: {
-          serviceAccount: env.json('GCS_SERVICE_ACCOUNT'),
-          bucketName: env('GCS_BUCKET_NAME'),
-          basePath: env('GCS_BASE_PATH'),
-          baseUrl: env('GCS_BASE_URL'),
-          publicFiles: env('GCS_PUBLIC_FILES'),
-          uniform: env('GCS_UNIFORM'),
-        },
+  upload: {
+    config: {
+      provider: '@strapi-community/strapi-provider-upload-google-cloud-storage',
+      providerOptions: {
+        serviceAccount: env.json('GCS_SERVICE_ACCOUNT'),
+        bucketName: env('GCS_BUCKET_NAME'),
+        basePath: env('GCS_BASE_PATH'),
+        baseUrl: env('GCS_BASE_URL'),
+        publicFiles: env('GCS_PUBLIC_FILES'),
+        uniform: env('GCS_UNIFORM'),
+        watermark: '<absolute path or URL>',
       },
     },
-    //...
+  },
+  //...
 });
 ```
 
@@ -135,6 +143,7 @@ Environment variable can be changed has your way.
 ## Setting up `strapi::security` middlewares to avoid CSP blocked url
 
 Edit `./config/middlewares.js`
+
 - In the field `img-src` and `media-src` add your own CDN url, by default it's `storage.googleapis.com` but you need to add your own CDN url
 
 ```js
@@ -175,6 +184,7 @@ Can be set as a String, JSON Object, or omitted.
 #### `bucketName` :
 
 The name of the bucket on Google Cloud Storage.
+
 - Required
 
 You can find more information on Google Cloud documentation.
@@ -182,6 +192,7 @@ You can find more information on Google Cloud documentation.
 #### `baseUrl` :
 
 Define your base Url, first is default value :
+
 - https://storage.googleapis.com/{bucket-name}
 - https://{bucket-name}
 - http://{bucket-name}
@@ -189,36 +200,41 @@ Define your base Url, first is default value :
 #### `basePath` :
 
 Define base path to save each media document.
+
 - Optional
 
 #### `publicFiles`:
 
 Boolean to define a public attribute to file when it upload to storage.
+
 - Default value : `true`
 - Optional
 
 #### `uniform`:
 
 Boolean to define uniform access, when uniform bucket-level access is enabled.
+
 - Default value : `false`
 - Optional
 
 #### `cacheMaxAge`:
 
 Number to set the cache-control header for uploaded files.
+
 - Default value : `3600`
 - Optional
 
 #### `gzip`:
 
 Value to define if files are uploaded and stored with gzip compression.
+
 - Possible values: `true`, `false`, `auto`
 - Default value : `auto`
 - Optional
 
 ### `metadata`:
 
-Function that is executed to compute the metadata for a file when it is uploaded. 
+Function that is executed to compute the metadata for a file when it is uploaded.
 
 When no function is provided, the following metadata is used:
 
@@ -263,12 +279,11 @@ Example:
   },
 ```
 
-
 ## FAQ
 
 ### Common errors
 
-#### Uniform access 
+#### Uniform access
 
 `Error uploading file to Google Cloud Storage: Cannot insert legacy ACL for an object when uniform bucket-level access is enabled`
 
@@ -281,6 +296,7 @@ When this error occurs, you need to set `uniform` variable to `true`.
 When this error occurs, it's probably because you have missed something with the service account json configuration.
 
 Follow this step :
+
 - Open your `ServiceAccount` json file
 - Copy the full content of the file
 - Paste it under the variable `ServiceAccount` in `plugins.js` config file in JSON
@@ -299,8 +315,8 @@ Follow our [migration guide](./MIGRATION_GUIDE.md).
 ## Community support
 
 - [GitHub](https://github.com/strapi-community/strapi-provider-upload-google-cloud-storage) (Bug reports, contributions)
-  
-You can also used official support platform of Strapi, and search `@Lith` (maintainer) 
+
+You can also used official support platform of Strapi, and search `@Lith` (maintainer)
 
 - [Discord](https://discord.strapi.io) (For live discussion with the Community and Strapi team)
 - [Community Forum](https://forum.strapi.io) (Questions and Discussions)
