@@ -1,10 +1,10 @@
-# strapi-provider-upload-google-cloud-storage
+# strapi-provider-upload-google-cloud-storage-with-watermark
 
 [![npm version](https://img.shields.io/npm/v/@strapi-community/strapi-provider-upload-google-cloud-storage.svg)](https://www.npmjs.org/package/@strapi-community/strapi-provider-upload-google-cloud-storage)
 [![npm downloads](https://img.shields.io/npm/dm/@strapi-community/strapi-provider-upload-google-cloud-storage.svg)](https://www.npmjs.org/package/@strapi-community/strapi-provider-upload-google-cloud-storage)
 [![coverage](https://img.shields.io/codecov/c/gh/@strapi-community/strapi-provider-upload-google-cloud-storage/master)](https://www.npmjs.org/package/@strapi-community/strapi-provider-upload-google-cloud-storage)
 
-**Non-Official** Google Cloud Storage Provider for Strapi Upload
+**Non-Official** Google Cloud Storage Provider for Strapi Upload with Watermark
 
 ## Installation
 
@@ -13,13 +13,13 @@ Install the package from your app root directory
 with `npm`
 
 ```
-npm install @imkopkap/strapi-provider-upload-google-cloud-storage --save
+npm install @imkopkap/strapi-provider-upload-google-cloud-storage-with-watermark --save
 ```
 
 or `yarn`
 
 ```
-yarn add @imkopkap/strapi-provider-upload-google-cloud-storage
+yarn add @imkopkap/strapi-provider-upload-google-cloud-storage-with-watermark
 ```
 
 ## <a name="create-bucket"></a> Create your Bucket on Google Cloud Storage
