@@ -1,5 +1,5 @@
 {
-  "name": "@strapi-community/strapi-provider-upload-google-cloud-storage",
+  "name": "@strapi-community/strapi-provider-upload-google-cloud-storage-with-watermark",
   "version": "4.3.6",
   "description": "(Non-official) Google Cloud Storage Provider for Strapi Upload",
   "keywords": [
